@@ -4,15 +4,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 // import { getLogin } from "../loginDetails/action";
 import { useNavigate } from "react-router-dom";
-
+import { userStatus } from "../Redux/auth/action";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  // let dispatch = useDispatch();
+  let dispatch = useDispatch();
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  console.log(user);
   const [user1, setUser1] = useState({
     email: "",
     password: "",
@@ -28,16 +29,17 @@ export const LoginPage = () => {
   }
   function handleSignUp() {
     axios
-      .post("http://localhost:3001/users/register", user)
+      .post("https://apartment-manager-system.herokuapp.com/register", user)
       .then((res) => {
         console.log(res.data.user._id);
+
         ////dispatch(getLogin(res.data.user._id));
         alert("registered sucessfully");
         setUser({
           email: "",
           password: "",
         });
-        navigate("/addFlats");
+        // navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -51,10 +53,11 @@ export const LoginPage = () => {
 
   function handleLogin() {
     axios
-      .post("http://localhost:3001/users/login", user1)
+      .post("https://apartment-manager-system.herokuapp.com/login", user1)
       .then((res) => {
         console.log(res.data.user._id);
         // dispatch(getLogin(res.data.user._id));
+        dispatch(userStatus({ payload: res.data, status: true }));
         alert("LoggedIn sucessfully");
         setUser1({
           email: "",
@@ -94,9 +97,12 @@ export const LoginPage = () => {
         }}
       />
       <br />
+      <br />
+
       <Button variant="contained" onClick={handleSignUp}>
         Submit
       </Button>
+      <hr />
       <h2>Login</h2>
       <input
         type="text"
@@ -117,6 +123,7 @@ export const LoginPage = () => {
           handleChange1(e);
         }}
       />
+      <br />
       <br />
       <Button variant="contained" onClick={handleLogin}>
         Submit
