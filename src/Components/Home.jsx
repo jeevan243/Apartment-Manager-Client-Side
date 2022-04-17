@@ -3,6 +3,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -18,6 +19,7 @@ export const Home = () => {
   console.log(status);
 
   const [flats, setFlats] = useState([]);
+  const [searchData, setSearchData] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     getFlats();
@@ -36,14 +38,95 @@ export const Home = () => {
         console.log("flats not fetched");
       });
   }
+  //
+
+  //sort country
+
+  function handleCountry() {
+    flats.sort(function (a, b) {
+      return a.type.localeCompare(b.type);
+    });
+    // console.log(flats);
+    setFlats([...flats]);
+  }
+
+  //sort by population
+  function handlePopulation(value) {
+    if (value == 1) {
+      flats.sort(function (a, b) {
+        return a.flatnumber - b.flatnumber;
+      });
+    } else {
+      flats.sort(function (a, b) {
+        return b.flatnumber - a.flatnumber;
+      });
+    }
+    setFlats([...flats]);
+  }
+  //searchBox
+
+  const handleSearch = (e) => {
+    const newValue = e.target.value;
+    if (newValue.length == 0) {
+      getFlats();
+    } else {
+      const newflats = flats.filter((el) => {
+        // let text = "Hello world, welcome to the universe.";
+
+        return el.block.startsWith(newValue);
+      });
+      setFlats(newflats);
+    }
+  };
 
   return (
     <>
+      <h2>Home Page</h2>
+      <hr />
+      <div>
+        <div>
+          <h2>search here..</h2>
+
+          <input
+            type="text"
+            id="search"
+            onChange={handleSearch}
+            maxLength={1}
+          />
+        </div>
+        <div>
+          {" "}
+          <h3>Sort By:</h3>
+          <Button variant="outlined" onClick={handleCountry}>
+            Type
+          </Button>{" "}
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handlePopulation(1);
+            }}
+          >
+            Flat asc
+          </Button>{" "}
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handlePopulation(-1);
+            }}
+          >
+            Flat desc
+          </Button>
+        </div>
+      </div>
+      <br />
+      <br />
       {status ? (
         <>
           {" "}
-          <h2>Home Page</h2>
-          <TableContainer component={Paper} style={{width:"80%", margin:"auto"}} >
+          <TableContainer
+            component={Paper}
+            style={{ width: "80%", margin: "auto" }}
+          >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow style={{ backgroundColor: "teal" }}>
@@ -61,14 +144,14 @@ export const Home = () => {
                       <TableCell align="center">{e.flatnumber}</TableCell>
                       <TableCell align="center">{e.type}</TableCell>
                       <TableCell align="center">{e.block}</TableCell>
-                      <TableCell align="center">{"no of residents"}</TableCell>
+                      <TableCell align="center">{5}</TableCell>
                       <TableCell
                         onClick={() => {
                           navigate(`/flats/${e._id}`);
                         }}
                         align="center"
                       >
-                        {"Details"}
+                        <Button variant="contained">Details</Button>
                       </TableCell>
                     </TableRow>
                   );
