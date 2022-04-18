@@ -11,12 +11,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  CircularProgress,
 } from "@mui/material";
 
 export const Home = () => {
   const local = JSON.parse(localStorage.getItem("userdata")) || false;
   const status = local;
   console.log(status);
+
+  const [loading, setLoading] = useState(false);
 
   const [flats, setFlats] = useState([]);
   const [searchData, setSearchData] = useState("");
@@ -38,6 +41,10 @@ export const Home = () => {
         console.log("flats not fetched");
       });
   }
+
+  //
+ 
+
   //
 
   //sort country
@@ -85,7 +92,7 @@ export const Home = () => {
       <hr />
       <div>
         <div>
-          <h2>search here..</h2>
+          <h2>Search here..</h2>
 
           <input
             type="text"
@@ -166,3 +173,8 @@ export const Home = () => {
     </>
   );
 };
+
+
+
+
+
