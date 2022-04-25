@@ -35,6 +35,7 @@ export const Home = () => {
       .get("https://apartment-manager-system.herokuapp.com/flats")
       .then((res) => {
         setFlats(res.data);
+        setLoading(true);
         // console.log(res.data);
       })
       .catch((e) => {
@@ -43,7 +44,6 @@ export const Home = () => {
   }
 
   //
- 
 
   //
 
@@ -129,43 +129,46 @@ export const Home = () => {
       <br />
       {status ? (
         <>
-          {" "}
-          <TableContainer
-            component={Paper}
-            style={{ width: "80%", margin: "auto" }}
-          >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow style={{ backgroundColor: "teal" }}>
-                  <TableCell align="center">Flat.No</TableCell>
-                  <TableCell align="center">Flat Type</TableCell>
-                  <TableCell align="center">Block</TableCell>
-                  <TableCell align="center">Residents</TableCell>
-                  <TableCell align="center">Details</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {flats.map((e) => {
-                  return (
-                    <TableRow>
-                      <TableCell align="center">{e.flatnumber}</TableCell>
-                      <TableCell align="center">{e.type}</TableCell>
-                      <TableCell align="center">{e.block}</TableCell>
-                      <TableCell align="center">{5}</TableCell>
-                      <TableCell
-                        onClick={() => {
-                          navigate(`/flats/${e._id}`);
-                        }}
-                        align="center"
-                      >
-                        <Button variant="contained">Details</Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          {loading ? (
+            <TableContainer
+              component={Paper}
+              style={{ width: "80%", margin: "auto" }}
+            >
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow style={{ backgroundColor: "teal" }}>
+                    <TableCell align="center">Flat.No</TableCell>
+                    <TableCell align="center">Flat Type</TableCell>
+                    <TableCell align="center">Block</TableCell>
+                    <TableCell align="center">Residents</TableCell>
+                    <TableCell align="center">Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {flats.map((e) => {
+                    return (
+                      <TableRow>
+                        <TableCell align="center">{e.flatnumber}</TableCell>
+                        <TableCell align="center">{e.type}</TableCell>
+                        <TableCell align="center">{e.block}</TableCell>
+                        <TableCell align="center">{5}</TableCell>
+                        <TableCell
+                          onClick={() => {
+                            navigate(`/flats/${e._id}`);
+                          }}
+                          align="center"
+                        >
+                          <Button variant="contained">Details</Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <CircularProgress />
+          )}
         </>
       ) : (
         <Navigate to={"/login"} />
@@ -173,8 +176,3 @@ export const Home = () => {
     </>
   );
 };
-
-
-
-
-
